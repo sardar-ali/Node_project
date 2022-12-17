@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const tourRouter = require("./routes/tourRoutes")
 const userRouter = require("./routes/userRoutes")
+
 const app = express();
 
 //middlewares
@@ -11,7 +12,10 @@ if (process.env.NODE_ENV === "development") {
 
 }
 
+//static file serve here
 app.use(express.static(`${__dirname}/public`))
+
+//middleware for created_at
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
     next()
