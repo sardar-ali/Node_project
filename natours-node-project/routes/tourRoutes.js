@@ -4,7 +4,11 @@ const tourController = require("./../controllers/tourController")
 // defined routes
 const router = express.Router()
 
-router.param("id", tourController.checkID);
+// router.param("id", tourController.checkID);
+
+//Alias route
+router.route("/top-5-cheap").
+    get(tourController.aliasTopTours, tourController.getAllTours)
 
 // create and get tours route
 router.route("/")
