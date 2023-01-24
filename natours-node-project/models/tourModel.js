@@ -1,4 +1,5 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const slugify = require("slugify")
 
 //tour schema define
 const tourSchema = new mongoose.Schema({
@@ -8,6 +9,7 @@ const tourSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    slug: String,
     duration: {
         type: Number,
         required: [true, "A tour must have a duration"]
@@ -53,7 +55,52 @@ const tourSchema = new mongoose.Schema({
         default: Date.now(),
         select: false
     },
-    startDates: [Date]
+    startDates: [Date],
+    secretTour: { 
+        type: Boolean,
+        default: false
+    },
+},
+
+{
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true}
+})
+
+tourSchema.virtual("durationWeeks").get(function(){
+   return this.duration / 7;
+})
+
+// RUN THE MADDILEWARE BEFORE SAVE AND CREATE METHOD EXPECT (insertMany)
+tourSchema.pre("save", function(next){
+     this.slug = slugify(this.name, {lower: true})
+    next()
+})
+
+
+// tourSchema.pre("save", function(next) { 
+//     console.log("Document will save ...");
+//     next()
+// });
+
+
+// tourSchema.post("save", function(doc, next){
+//     console.log("Doc :::", doc);
+//     next()
+// })
+
+
+// tourSchema.pre("find", function(next){
+tourSchema.pre(/^find/, function(next){
+this.find({secretTour: {$ne: true}})
+this.start = Date.now()
+next();
+})
+
+
+tourSchema.post(/^find/, function(doc,next){
+console.log(`this is quary took ${Date.now() - this?.start}`)
+    next();
 })
 
 // tour model declearation

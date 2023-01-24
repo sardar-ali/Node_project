@@ -10,6 +10,15 @@ const router = express.Router()
 router.route("/top-5-cheap").
     get(tourController.aliasTopTours, tourController.getAllTours)
 
+//aggregation route
+router.route("/tour-stats").
+    get(tourController.getTourStats)
+
+//aggregation route
+router.route("/monthly-plan/:year").
+    get(tourController.getMonthlyPlan)
+
+
 // create and get tours route
 router.route("/")
     .get(tourController.getAllTours)
