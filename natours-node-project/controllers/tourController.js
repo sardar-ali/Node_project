@@ -191,7 +191,7 @@ exports.createTours = async (req, res) => {
     } catch (error) {
         res.status(400).send({
             status: "fail",
-            message: "Invalid Data",
+            message: error,
         })
     }
 }
@@ -291,7 +291,7 @@ exports.getTourStats = async (req, res) => {
 
 exports.getMonthlyPlan = async (req, res) => {
     try {
-        
+
         const year = req?.params.year;
         const plan = await Tour.aggregate([
             {
