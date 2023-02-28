@@ -1,5 +1,6 @@
 const express = require("express");
-const tourController = require("./../controllers/tourController")
+const tourController = require("./../controllers/tourController");
+const authController = require("./../controllers/authController");
 
 // defined routes
 const router = express.Router()
@@ -21,13 +22,16 @@ router.route("/monthly-plan/:year").
 
 // create and get tours route
 router.route("/")
-    .get(tourController.getAllTours)
+    .get(authController.protect, tourController.getAllTours)
     .post(tourController.checkBody, tourController.createTours)
 
 //get single, update and delete tour route
 router.route("/:id")
     .get(tourController.getTour)
     .patch(tourController.updateTour)
-    .delete(tourController.deleteTour)
+    .delete(
+        authController.protect,
+        authController.restricTo("admin", "lead-guide"),
+        tourController.deleteTour)
 
 module.exports = router

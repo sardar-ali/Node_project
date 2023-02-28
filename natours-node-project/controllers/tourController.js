@@ -13,7 +13,7 @@ const AppError = require("./../utils/appError")
 
 //     console.log(`TOUR ID IS :: ${val}`)
 //     if (req.params.id > tours.length - 1) {
-//         return res.status(404).send({
+//         return res.status(404).json({
 //             status: "fail",
 //             message: "Invalid ID"
 //         })
@@ -33,7 +33,7 @@ exports.aliasTopTours = (req, res, next) => {
 
 exports.checkBody = (req, res, next) => {
     if (!req.body["name"] || !req.body["price"]) {
-        return res.status(404).send({
+        return res.status(404).json({
             status: "fail",
             message: "Invalid Data!"
         })
@@ -45,7 +45,7 @@ exports.checkBody = (req, res, next) => {
 
 
 
-// hite the that send tours in response to user
+// hite the that json tours in response to user
 exports.getAllTours = catchAsync(async (req, res, next) => {
 
     const features = new APIFeatures(Tour.find(), req.query).filter().sort().limitsFields().pagination()
@@ -54,8 +54,8 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
     const tours = await features.query;
     // const tours = await query;
 
-    // SEND RESPONSE
-    res.status(200).send({
+    // json RESPONSE
+    res.status(200).json({
         status: "success",
         results: tours.length,
         data: {
@@ -117,8 +117,8 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
     // const tours = await features.query;
     // // const tours = await query;
 
-    // // SEND RESPONSE
-    // res.status(200).send({
+    // // json RESPONSE
+    // res.status(200).json({
     //     status: "success",
     //     results: tours.length,
     //     data: {
@@ -127,7 +127,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
     // })
 
     // } catch (err) {
-    //     res.status(404).send({
+    //     res.status(404).json({
     //         status: "fail",
     //         message: {
     //             err
@@ -160,7 +160,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
         return next(new AppError("No tour found with that ID", 404))
     }
 
-    res.status(200).send({
+    res.status(200).json({
         status: "success",
         data: {
             tour
@@ -171,14 +171,14 @@ exports.getTour = catchAsync(async (req, res, next) => {
     // WITH TRY CATCH METHOD 
     // try {
     //    let tour = await Tour.findById(id);
-    //    res.status(200).send({
+    //    res.status(200).json({
     //        status: "success",
     //        data: {
     //            tour
     //        }
     //    })
     // } catch (err) {
-    //     res.status(404).send({
+    //     res.status(404).json({
     //         status: "fail",
     //         message: {
     //             err
@@ -194,7 +194,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     //         message: "Invalid Id"
     //     })
     // }
-    // res.status(200).send({
+    // res.status(200).json({
     //     status: "success",
     //     data: {
     //         tour,
@@ -210,7 +210,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
 exports.createTours = catchAsync(async (req, res, next) => {
 
     const newTour = await Tour.create(req.body);
-    res.status(201).send({
+    res.status(201).json({
         status: "success",
         createdAt: req.requestTime,
         data: { tours: newTour }
@@ -230,7 +230,7 @@ exports.createTours = catchAsync(async (req, res, next) => {
     // WITH TRY CATCH METHOD 
     // try {
     // const newTour = await Tour.create(req.body);
-    // res.status(201).send({
+    // res.status(201).json({
     //     status: "success",
     //     createdAt: req.requestTime,
     //     data: { tours: newTour }
@@ -240,7 +240,7 @@ exports.createTours = catchAsync(async (req, res, next) => {
     // }
     // or
     // } catch (error) {
-    //     res.status(400).send({
+    //     res.status(400).json({
     //         status: "fail",
     //         message: error,
     //     })
@@ -261,7 +261,7 @@ exports.updateTour = catchAsync(async (req, res, next) => {
         return next(new AppError("No tour found with that ID", 404))
     }
 
-    return res.status(200).send({
+    return res.status(200).json({
         status: "success",
         data: {
             tour
@@ -275,14 +275,14 @@ exports.updateTour = catchAsync(async (req, res, next) => {
     //     runValidators: true
     // })
 
-    // return res.status(200).send({
+    // return res.status(200).json({
     //     status: "success",
     //     data: {
     //         tour
     //     }
     // })
     // } catch (error) {
-    //     res.status(404).send({
+    //     res.status(404).json({
     //         status: "fail",
     //         message: error
     //     })
@@ -300,7 +300,7 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
         return next(new AppError("No tour found with that ID", 404))
     }
 
-    res.status(204).send({
+    res.status(204).json({
         status: "success",
         data: {
             tour
@@ -312,7 +312,7 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
     // try {
     //   let tour = await Tour.findByIdAndDelete(req.params.id);
 
-    //   res.status(204).send({
+    //   res.status(204).json({
     //       status: "success",
     //       data: {
     //           tour
@@ -320,7 +320,7 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
     //       message: "Tour Deleted Successfully",
     //   })
     // } catch (error) {
-    //     res.status(404).send({
+    //     res.status(404).json({
     //         status: "Faild",
     //         message: {
     //             error
@@ -399,7 +399,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
     // })
 
     // } catch (error) {
-    //     res.status(404).send({
+    //     res.status(404).json({
     //         status: "Faild",
     //         message: {
     //             error: "Something went worng"
@@ -514,7 +514,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     //  })
 
     // } catch (error) {
-    //     res.status(404).send({
+    //     res.status(404).json({
     //         status: "Faild",
     //         message: {
     //             error: "Something went worng"
