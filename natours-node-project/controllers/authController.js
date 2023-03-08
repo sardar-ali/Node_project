@@ -15,6 +15,19 @@ const jwtTokenSing = (id) => {
 //SEND TOKEN TO USER
 const createSendToken = (user, statusCode, res) => {
     const token = jwtTokenSing(user?._id)
+const cookieOptions =  {
+    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    httpOnly: true
+    // secure: true,
+}
+
+if (process.env.NODE_ENV.trim() === "production") cookieOptions.secure = true;
+    //SEND TOKEN COOKIE
+    res.cookie("jwt", token, cookieOptions);
+
+    //REMOVE THE PASSWORD FROM OUTPUT
+    user.password = undefined
+
 
     res.status(statusCode).json({
         status: "success",
@@ -241,7 +254,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     await user.save();
 
     //LOGIN USRE SEND JWT TOKEN
-
     createSendToken(user, 200, res)
 
     //     const token = jwtTokenSing(user?._id);

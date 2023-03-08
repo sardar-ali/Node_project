@@ -36,8 +36,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
     //FILTER UNWANTED DATA THAT ARE NOT ALLOWED TO UPDATE 
     const filteredBody = filterObject(req.body, "email", "name", "active");
-
-    console.log("test ::", req.user)
+    
     // THEN UPDATE USER DATA
     const updateUser = await User.findByIdAndUpdate(req.user._id, filteredBody, {
         new: true,
@@ -65,9 +64,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
 
 exports.deleteMe = catchAsync(async (req, res, next) => {
-    console.log("req ::", req?.user)
+   
     const user = await User.findOneAndUpdate(req?.user?._id, { active: false });
-    console.log("user ::", user)
+
     res.status(204).send({
         status: "success",
         message: "user deleted successfully",
